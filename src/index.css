@@ -1,0 +1,194 @@
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+  background: rgb(77,133,105);
+  background: linear-gradient(135deg, rgba(77,133,105,1) 0%, rgba(53,101,77,1) 50%);
+  color: white;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+.dealer-ui {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0;
+  height: 38%;
+  justify-content: space-between;
+  padding-bottom: 32px;
+}
+
+.player-ui {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  height: 38%;
+  justify-content: space-between;
+  padding-bottom: 32px;
+}
+
+.player-score {
+  font-weight: bold;
+  font-size: 32px;
+  padding: 0;
+  margin: 0;
+}
+.bust {
+  color: red;
+}
+
+.players-hand,
+.dealers-hand {
+  display: flex;
+  justify-content: center;
+}
+
+.bicycle-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: white;
+  color: black;
+  width: 76px;
+  height: 107px;
+  margin: 0 4px;
+  border-radius: 3px;
+  box-shadow: 3px 3px 4px 2px #0000006e;
+  font-weight: bold;
+}
+.is-red {
+  color: #db0000;
+}
+.face-down-card {
+  background: #ffffff;
+}
+.card-box {
+  font-size: 53px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(218,230,237);
+  background: radial-gradient(circle, rgba(218,230,237,1) 0%, rgba(178,198,209,1) 50%);
+  width: 68px;
+  height: 100px;
+  margin: auto;
+  border-radius: 5px;
+}
+
+.card-val {
+  text-align: left;
+  margin: 0;
+  padding: 4px 8px;
+}
+
+.card-suit {
+  font-size: 32px;
+  margin: 0;
+}
+
+.upside-down {
+  transform: rotate(180deg);
+}
+
+.button-holder > button {
+  width: 140px;
+}
+
+.button-holder {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.button-holder.is-standing {
+  visibility: hidden;
+}
+
+.stand-button {
+  background: #f10000;
+  color: white;
+}
+
+.game-over-screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  background: #00000080;
+}
+
+.game-over-modal {
+  background: white;
+  color: black;
+  width: 72%;
+  margin: 229px auto 0 auto;
+  padding: 16px 8px;
+}
+
+h3 {
+  margin: 0;
+  padding: 0;
+}
