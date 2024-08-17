@@ -71,7 +71,7 @@ button:focus-visible {
   width: 100%;
   left: 0;
   height: 38%;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding-bottom: 32px;
 }
 
