@@ -186,6 +186,7 @@ button:focus-visible {
   width: 72%;
   margin: 229px auto 0 auto;
   padding: 16px 8px;
+  border-radius: 5px;
 }
 
 h3 {

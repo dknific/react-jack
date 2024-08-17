@@ -174,8 +174,8 @@ function App() {
       <>
         {deck.length == 0 ? (
           <>
-            <h1>ReactJack</h1>
-            <h2>blackjack with React... jack</h2>
+            <h1>ReactJack.ts</h1>
+            <h2>Blackjack made in React</h2>
             <button onClick={() => handleGameStart()}>Start Game</button>
           </>
         ) : (
