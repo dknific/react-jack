@@ -34,9 +34,9 @@ function getRandomIndexFromArray(list: Array<Card>) {
   return Math.floor((Math.random()*list.length));
 }
 
-function calculateVisibleDealerScore(dealerCards: Card[]) {
+function calculateVisibleDealerScore(dealersHand: Card[]) {
   let visibleScore = 0;
-  dealerCards.forEach(card => {
+  dealersHand.forEach(card => {
     if (!card.isFaceDown && typeof card.value !== 'string') {
       visibleScore += card.value;
     } else if (!card.isFaceDown) {
@@ -49,11 +49,10 @@ function calculateVisibleDealerScore(dealerCards: Card[]) {
 function App() {
   const [deck, setDeck] = useState<Card[]>([]);
   const [scoreCard, setScoreCard] = useState<ScoreCard>(EMPTY_SCORECARD);
-  const [playerCards, setPlayerCards] = useState<Card[]>([]);
-  const [dealerCards, setDealerCards] = useState<Card[]>([]);
+  const [playersHand, setPlayersHand] = useState<Card[]>([]);
+  const [dealersHand, setDealersHand] = useState<Card[]>([]);
   const [isGameOver, setIsGameOver] = useState(false);
 
-  
   function handleGameStart() {
     const playerHand: Card[] = [];
     const dealerHand: Card[] = [];
@@ -74,6 +73,7 @@ function App() {
         playerHand.push(card);
         playerScore += scoreToAdd;
       } else if (i == 4) {
+        card.isFaceDown = true;
         dealerHand.push(card);
         dealerScore += scoreToAdd;
       } else if (i == 2) {
@@ -84,16 +84,16 @@ function App() {
     }
     
     setDeck(updatedDeck);
-    setPlayerCards(playerHand);
-    setDealerCards(dealerHand);
+    setPlayersHand(playerHand);
+    setDealersHand(dealerHand);
     setScoreCard({ user: playerScore, dealer: calculateVisibleDealerScore(dealerHand) });
   }
 
   function handleResetGame() {
     document.getElementsByClassName('button-holder')[0].classList.remove('is-standing');
     setScoreCard(EMPTY_SCORECARD);
-    setPlayerCards([]);
-    setDealerCards([]);
+    setPlayersHand([]);
+    setDealersHand([]);
     setIsGameOver(false);
 
     setTimeout(() => handleGameStart(), 500);
@@ -109,16 +109,18 @@ function App() {
       ? 10
       : pulledCard.value;
     
-    const newPlayerHand: Card[] = [...playerCards];
+    const newPlayerHand: Card[] = [...playersHand];
     newPlayerHand.push(pulledCard);
 
     const newPlayerScore: number = scoreCard.user += scoreToAdd;
-    setPlayerCards(newPlayerHand);
+    setPlayersHand(newPlayerHand);
     setDeck(updatedDeck);
     setScoreCard({ ...scoreCard, user: newPlayerScore });
 
     if (newPlayerScore > 21) {
       setTimeout(() => setIsGameOver(true), 400);
+    } else if (newPlayerScore == 21) {
+      handleStandBtn();
     }
   }
 
@@ -132,7 +134,7 @@ function App() {
     newDealerHand.push(pulledCard);
     let newDealerScore: number = calculateVisibleDealerScore(newDealerHand);
 
-    setDealerCards(newDealerHand);
+    setDealersHand(newDealerHand);
     setDeck(updatedDeck);
     setScoreCard({ ...scoreCard, dealer: newDealerScore });
 
@@ -141,31 +143,68 @@ function App() {
 
   function handleStandBtn() {
     document.getElementsByClassName('button-holder')[0].classList.add('is-standing');
-    let updatedDealerHand: Card[] = dealerCards.map(card => {
+    let updatedDealerHand: Card[] = dealersHand.map(card => {
       const newCard: Card = { ...card, isFaceDown: false };
       return newCard;
     });
     let newDealerScore: number = calculateVisibleDealerScore(updatedDealerHand);
     
-    setDealerCards(updatedDealerHand);
-    setScoreCard({ ...scoreCard, dealer: newDealerScore });
+    // Pause for a sec before revealing dealers card:
+    setTimeout(() => {
+      setDealersHand(updatedDealerHand);
+      setScoreCard({ ...scoreCard, dealer: newDealerScore });
 
-    if (newDealerScore < 17) {
-      const myInterval = setInterval(() => {
-        const newHand: Card[] = handleDealToDealer(updatedDealerHand);
-        updatedDealerHand = newHand;
-        newDealerScore = calculateVisibleDealerScore(updatedDealerHand);
+      // Keep dealing until dealer score is 17 or greater:
+      if (newDealerScore < 17) {
+        const myInterval = setInterval(() => {
+          const newHand: Card[] = handleDealToDealer(updatedDealerHand);
+          updatedDealerHand = newHand;
+          newDealerScore = calculateVisibleDealerScore(updatedDealerHand);
 
-        if (newDealerScore >= 17) {
-          setTimeout(() => {
-            setIsGameOver(true);
-            clearInterval(myInterval);
-          }, 400);
-          
-        } 
-      }, 600);
-    } else {
-      setIsGameOver(true);
+          // When score hits 17 or greater, pause for sec then clear Interval:
+          if (newDealerScore >= 17) {
+            setTimeout(() => {
+              setIsGameOver(true);
+              clearInterval(myInterval);
+            }, 400);
+            
+          } 
+        }, 600);
+      } else {
+        setTimeout(() => {
+          setIsGameOver(true);
+        }, 500);
+      }
+    }, 500);
+  }
+
+  function evaluateScore() {
+    switch(true) {
+      case scoreCard.user > 21:
+        return 'YOU LOSE!';
+      case scoreCard.dealer > 21:
+        return 'YOU WIN!';
+      case scoreCard.user > scoreCard.dealer:
+        return 'YOU WIN!';
+      case scoreCard.dealer > scoreCard.user:
+        return 'YOU LOSE!';
+      case scoreCard.dealer === scoreCard.user:
+        return "Push!";
+    }
+  }
+
+  function evaluateResultDetails() {
+    switch(true) {
+      case scoreCard.user > 21:
+        return 'Player busts!';
+      case scoreCard.dealer > 21:
+        return 'Dealer busts.';
+      case scoreCard.user > scoreCard.dealer:
+        return "Player's hand wins.";
+      case scoreCard.dealer > scoreCard.user:
+        return "The dealer's hand wins.";
+      case scoreCard.dealer === scoreCard.user:
+        return "I got news for ya... that means ya gay!";
     }
   }
 
@@ -174,31 +213,41 @@ function App() {
       <>
         {deck.length == 0 ? (
           <>
-            <h1>ReactJack.ts</h1>
-            <h2>Blackjack made in React</h2>
-            <button onClick={() => handleGameStart()}>Start Game</button>
+            <div className='home-screen-container'>
+              <div className='home-text'>
+                <h1>ReactJack.ts</h1>
+                <h2>Blackjack made in React</h2>
+              </div>
+              <button onClick={() => handleGameStart()}>New Game</button>
+            </div>
           </>
         ) : (
           <>
             {isGameOver && (
               <div className="game-over-screen">
                 <div className="game-over-modal">
-                  <h3>Game Over!</h3>
+                  <h3>{evaluateScore()}</h3>
+                  <p>{evaluateResultDetails()}</p>
                   <button onClick={() => handleResetGame()}>New Game</button>
                 </div>
               </div>
             )}
             <div className='dealer-ui'>
-              <p className={`player-score ${scoreCard.dealer > 21 ? 'bust' : ''}`}>{scoreCard.dealer}</p>
+              {scoreCard.dealer > 0 && (
+                <p className={`player-score ${scoreCard.dealer > 21 ? 'bust' : ''}`}>{scoreCard.dealer}</p>
+              )}
               <div className="dealers-hand">
-                {dealerCards.map(crd => {
+                {dealersHand.map((crd, index) => {
                   return crd.isFaceDown
-                    ? <div className='bicycle-card face-down-card'><div className='card-box'>⚛</div></div>
+                    ? <div className='bicycle-card face-down-card' key={index}>
+                        <div className='card-box'>⚛</div>
+                      </div>
                     : (
                       <div
                         className={
                           `bicycle-card ${(crd.suit === 'HEARTS' || crd.suit === 'DIAMONDS') ? 'is-red' : ''}`
                         }
+                        key={index}
                       >
                         <p className='card-val'>{crd.value}</p>
                         <p className='card-suit'>{renderCardSuit(crd.suit)}</p>
@@ -209,13 +258,16 @@ function App() {
               </div>
             </div>
             <div className="player-ui">
+            {scoreCard.dealer > 0 && (
               <p className={`player-score ${scoreCard.user > 21 ? 'bust' : ''}`}>{scoreCard.user}</p>
+            )}
               <div className="players-hand">
-                {playerCards.map(crd => (
+                {playersHand.map((crd, index) => (
                   <div
                     className={
                       `bicycle-card ${(crd.suit === 'HEARTS' || crd.suit === 'DIAMONDS') ? 'is-red' : ''}`
                     }
+                    key={index}
                   >
                     <p className='card-val'>{crd.value}</p>
                     <p className='card-suit'>{renderCardSuit(crd.suit)}</p>
