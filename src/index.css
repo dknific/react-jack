@@ -2,7 +2,9 @@ body {
   margin: 0;
   display: flex;
   min-width: 320px;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
   background: rgb(77,133,105);
   background: linear-gradient(135deg, rgba(77,133,105,1) 0%, rgba(53,101,77,1) 50%);
   color: white;
@@ -70,6 +72,7 @@ h1 {
 
 .home-screen-container > button {
   width: 183px;
+  height: 48px;
   margin: 0 auto;
   font-weight: bold;
 }
