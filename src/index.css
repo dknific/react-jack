@@ -178,6 +178,17 @@ button:focus-visible {
   border-radius: 5px;
 }
 
+.card-box > svg {
+  width: 45px;
+  animation: spin 8s linear infinite;
+}
+@keyframes spin { 
+  100% { 
+      -webkit-transform: rotate(360deg); 
+      transform:rotate(360deg); 
+  } 
+}
+
 .card-val {
   text-align: left;
   margin: 0;
@@ -236,3 +247,15 @@ h3 {
   padding: 0;
   letter-spacing: 2px;
 }
+
+@media (min-width: 1024px) {
+  .button-holder {
+    width: 300px;
+    margin: 0 auto;
+    justify-content: space-between;
+  }
+  .game-over-modal {
+    width: 320px;
+  }
+}
+
