@@ -103,17 +103,21 @@ function App() {
     setTimeout(() => {
       document.getElementsByClassName('player-score')[0].classList.remove('is-hidden');
       document.getElementsByClassName('player-score')[1].classList.remove('is-hidden');
+      document.getElementsByClassName('dealer-chip')[0].classList.remove('is-dealers-turn');
+      document.getElementsByClassName('player-chip')[0].classList.add('is-players-turn');
+      document.getElementsByClassName('button-holder')[0].classList.remove('is-standing');
     }, 1250);
   }
 
   function handleResetGame() {
-    document.getElementsByClassName('button-holder')[0].classList.remove('is-standing');
-
     setScoreCard(EMPTY_SCORECARD);
     setPlayersHand([]);
     setDealersHand([]);
     setIsGameOver(false);
     setHasRevealed(false);
+    document.getElementsByClassName('button-holder')[0].classList.add('is-standing');
+    document.getElementsByClassName('dealer-chip')[0].classList.add('is-dealers-turn');
+    document.getElementsByClassName('player-chip')[0].classList.remove('is-players-turn');
 
     setTimeout(() => handleGameStart(), 500);
   }
@@ -160,6 +164,8 @@ function App() {
 
   function handleStandBtn() {
     document.getElementsByClassName('button-holder')[0].classList.add('is-standing');
+    document.getElementsByClassName('dealer-chip')[0].classList.add('is-dealers-turn');
+    document.getElementsByClassName('player-chip')[0].classList.remove('is-players-turn');
     let updatedDealerHand: Card[] = dealersHand.map(card => {
       const newCard: Card = { ...card, isFaceDown: false };
       return newCard;
@@ -211,6 +217,21 @@ function App() {
     }
   }
 
+  function evaluateClassHeader() {
+    switch(true) {
+      case scoreCard.user > 21:
+        return 'lose-header';
+      case scoreCard.dealer > 21:
+        return 'win-header';
+      case scoreCard.user > scoreCard.dealer:
+        return 'win-header';
+      case scoreCard.dealer > scoreCard.user:
+        return 'lose-header';
+      case scoreCard.dealer === scoreCard.user:
+        return "win-header";
+    }
+  }
+
   function evaluateResultDetails() {
     switch(true) {
       case scoreCard.user > 21:
@@ -222,7 +243,7 @@ function App() {
       case scoreCard.dealer > scoreCard.user:
         return "The dealer's hand wins.";
       case scoreCard.dealer === scoreCard.user:
-        return "I got news for ya... that means ya gay!";
+        return "Well, wouldja look at THAT!";
     }
   }
 
@@ -242,13 +263,14 @@ function App() {
             {isGameOver && (
               <div className="game-over-screen">
                 <div className="game-over-modal">
-                  <h3>{evaluateScore()}</h3>
+                  <h3 className={evaluateClassHeader()}>{evaluateScore()}</h3>
                   <p>{evaluateResultDetails()}</p>
-                  <button onClick={() => handleResetGame()}>New Game</button>
+                  <button className='new-game-button' onClick={() => handleResetGame()}>Play Again</button>
                 </div>
               </div>
             )}
             <div className='dealer-ui'>
+              <div className='dealer-chip is-dealers-turn'>DEALER</div>
               {scoreCard.dealer > 0 && (
                 <p className={`player-score ${scoreCard.dealer > 21 ? 'bust' : ''} ${dealersHand.length > 2 ? '' : 'is-hidden'}`}>{scoreCard.dealer}</p>
               )}
@@ -285,6 +307,7 @@ function App() {
               </div>
             </div>
             <div className="player-ui">
+            <div className='player-chip'>YOU</div>
             {scoreCard.dealer > 0 && (
               <p
                 className={`player-score ${scoreCard.user > 21 ? 'bust' : ''}
@@ -307,7 +330,7 @@ function App() {
                   </div>
                 ))}
               </div>
-              <div className='button-holder'>
+              <div className='button-holder is-standing'>
                 <button className='stand-button' onClick={() => handleStandBtn()}>Stand</button>
                 <button
                   className='hit-button'

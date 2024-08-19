@@ -125,6 +125,54 @@ button:focus-visible {
   padding-bottom: 32px;
 }
 
+.dealer-chip {
+  opacity: 0.4;
+  position: absolute;
+  background: black;
+  width: 88px;
+  height: 41px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-radius: 23px;
+  left: 50%;
+  margin-left: -150px;
+  margin-bottom: 124px;
+  box-shadow: 2px 2px 2px 1px #00000078;
+  transform: rotate(-12deg);
+}
+.dealer-chip.is-dealers-turn {
+  opacity: 1;
+  box-shadow: 0px 0px 11px 7px rgb(239 255 238 / 47%);
+}
+
+.player-chip {
+  opacity: 0.4;
+  position: absolute;
+  left: 50%;
+  margin-left: 68px;
+  bottom: 87%;
+  width: 68px;
+  height: 46px;
+  border-radius: 23px;
+  background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,255,194,1) 100%);;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transform: rotate(12deg);
+}
+.player-chip.is-players-turn {
+  opacity: 1;
+  box-shadow: 0px 0px 11px 7px rgb(239 255 238 / 30%);
+}
+
 .player-ui {
   display: flex;
   flex-direction: column;
@@ -236,8 +284,13 @@ button:focus-visible {
 }
 
 .stand-button {
-  background: #f10000;
+  background: #7e93ff;
   color: white;
+  font-size: 18px;
+}
+
+.hit-button {
+  font-size: 18px;
 }
 
 .game-over-screen {
@@ -251,31 +304,77 @@ button:focus-visible {
 }
 
 .game-over-modal {
-  background: white;
+  background: #ececec;
   color: black;
   width: 72%;
   margin: 229px auto 0 auto;
-  padding: 16px 8px;
   border-radius: 5px;
   box-shadow: 3px 3px 3px 1px black;
 }
 
-h3 {
+.game-over-modal > h3 {
   margin: 0;
   padding: 0;
   letter-spacing: 2px;
+  font-size: 32px;
+  border-radius: 4px 4px 0px 0;
+  padding: 4px 0;
+  background: transparent;
+  box-shadow: 2px 2px 2px 1px #000000b0;
+  transform: translate(-1px);
+  
 }
+.game-over-modal > .lose-header {
+  animation: loseGlow 2s linear infinite alternate;
+}
+.game-over-modal > .win-header {
+  animation: winGlow 1s linear infinite alternate;
+}
+@keyframes loseGlow { 
+  from {
+
+    background: #cf4a55;
+  } to {
+    box-shadow: 0px 0px 12px 6px rgb(255 45 45 / 90%);
+    background: #f07f88;
+  }
+}
+@keyframes winGlow { 
+  from {
+    background: #1ea760;
+  } to {
+    box-shadow: 0px 0px 12px 6px rgba(132, 255, 177, 0.9);
+    background: #35ff95;
+  }
+}
+
+.game-over-modal > p {
+  margin: 22px 0;
+}
+
+.new-game-button {
+  margin-bottom: 18px;
+  box-shadow: 2px 2px 1px 1px #00000054;
+  border: 1px solid #00000036;
+}
+
 
 @media (min-width: 1024px) {
   .player-ui {
     height: 236px;
     justify-content: baseline;
   }
+
+  .player-ui > .player-score {
+    margin-bottom: -22px;
+  }
+
   .button-holder {
     width: 300px;
     margin: 0 auto;
     justify-content: space-between;
   }
+
   .game-over-modal {
     width: 320px;
   }
