@@ -53,15 +53,23 @@ nav > a {
   color: #fff;
 }
 
-.home-screen-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-around;
+.home-text {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  width: 100%;
 }
 
-.home-text {
-  padding-bottom: 152px;
+.start-button {
+  position: absolute;
+  bottom: 17%;
+  left: 50%;
+  width: 140px;
+  margin-left: -70px;
+  color: black;
+  box-shadow: 4px 4px 4px 1px #00000073;
+  font-weight: bold;
+  letter-spacing: 0.25px;
 }
 
 h1 {
@@ -121,12 +129,11 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   position: absolute;
-  bottom: 0;
+  bottom: 58px;
   width: 100%;
   left: 0;
   height: 38%;
   justify-content: space-between;
-  padding-bottom: 32px;
 }
 
 .player-score {
@@ -137,6 +144,10 @@ button:focus-visible {
 }
 .bust {
   color: red;
+}
+
+.player-ui > .player-score {
+  margin-bottom: -50px;
 }
 
 .players-hand,
@@ -157,6 +168,7 @@ button:focus-visible {
   border-radius: 3px;
   box-shadow: 3px 3px 4px 2px #0000006e;
   font-weight: bold;
+  visibility: visible;
 }
 .is-red {
   color: #db0000;
@@ -164,6 +176,10 @@ button:focus-visible {
 .face-down-card {
   background: #ffffff;
 }
+.is-hidden {
+  visibility: hidden;
+}
+
 .card-box {
   font-size: 53px;
   font-weight: bold;
@@ -206,6 +222,7 @@ button:focus-visible {
 
 .button-holder > button {
   width: 140px;
+  box-shadow: 4px 4px 4px 1px #00000073;
 }
 
 .button-holder {
@@ -240,6 +257,7 @@ button:focus-visible {
   margin: 229px auto 0 auto;
   padding: 16px 8px;
   border-radius: 5px;
+  box-shadow: 3px 3px 3px 1px black;
 }
 
 h3 {
@@ -249,6 +267,10 @@ h3 {
 }
 
 @media (min-width: 1024px) {
+  .player-ui {
+    height: 236px;
+    justify-content: baseline;
+  }
   .button-holder {
     width: 300px;
     margin: 0 auto;
