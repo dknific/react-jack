@@ -57,6 +57,9 @@ nav > a {
   position: absolute;
   top: 10%;
   left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
 }
 
@@ -227,6 +230,11 @@ button:focus-visible {
 .is-hidden {
   visibility: hidden;
 }
+.home-card {
+  width: 118px;
+  height: 166px;
+  margin-top: 16px;
+}
 
 .card-box {
   font-size: 53px;
@@ -240,6 +248,10 @@ button:focus-visible {
   height: 100px;
   margin: auto;
   border-radius: 5px;
+}
+.home-card-box {
+  width: 100px;
+  height: 147px;
 }
 
 .card-box > svg {
@@ -358,8 +370,16 @@ button:focus-visible {
   border: 1px solid #00000036;
 }
 
+@media (min-width: 720px) {
+  .dealer-ui {
+    height: auto;
+    top: 94px;
+  }
+}
 
 @media (min-width: 1024px) {
+  
+
   .player-ui {
     height: 236px;
     justify-content: baseline;
