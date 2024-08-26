@@ -179,7 +179,7 @@ function App() {
                 <div className='wallet-explainer'>
                   <p>Your Coins:</p>
                   <div>
-                    <img src="/public/coin.svg" />
+                    <img src="/coin.svg" />
                     <p>{userCoins}</p>
                   </div>
                 </div>
@@ -240,7 +240,7 @@ function App() {
                   <div className='payout-text'>
                     <p>You win</p>
                     <div className='payout-amount'>
-                      <img src="/public/coin.svg" />
+                      <img src="/coin.svg" />
                       <p>{gameResult.payout}.</p>
                     </div>
                   </div>
@@ -252,7 +252,7 @@ function App() {
 
           <div className="wallet">
             <div className='your-wallet'>
-              <img src="/public/coin.svg" />
+              <img src="/coin.svg" />
               <p>{userCoins}</p>
             </div>
             <p>Bet: {currentPot}</p>

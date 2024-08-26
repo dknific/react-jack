@@ -355,7 +355,7 @@ button:focus-visible {
 .bet-modal {
   width: 252px;
   margin: 163px auto 0 auto;
-  animation: betModalGlow 0.5s linear infinite alternate;
+  animation: betModalGlow 0.75s linear infinite alternate;
 }
 
 @keyframes betModalGlow {
@@ -363,7 +363,7 @@ button:focus-visible {
     box-shadow: 0px 0 12px 0px #b5a5ff;
   }
   to {
-    box-shadow: 0 0 12px 11px #ffff1d70;
+    box-shadow: 0 0 12px 11px #b5a5ff9b;
   }
 }
 
@@ -398,6 +398,7 @@ button:focus-visible {
   padding: 8px 0;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
+  color: black;
 }
 
 .bet-amount-button {
