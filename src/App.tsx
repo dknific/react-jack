@@ -143,6 +143,26 @@ function App() {
     setCurrentScreen('PLACE_BET');
   }
 
+  function evaluatePlayerAnimationClass(cardIndex: number) {
+    if (playersHand.length === 4) {
+      return `player${cardIndex + 1} four-card-position`
+    } else if (playersHand.length === 3) {
+      return `player${cardIndex + 1} three-card-position`
+    } else if (playersHand.length === 2) {
+      return `player${cardIndex + 1}`;
+    }
+  }
+
+  function evaluateDealerAnimationClass(cardIndex: number) {
+    if (dealersHand.length === 4) {
+      return `dealer${cardIndex + 1} four-card-position`
+    } else if (dealersHand.length === 3) {
+      return `dealer${cardIndex + 1} three-card-position`
+    } else if (dealersHand.length === 2) {
+      return `dealer${cardIndex + 1}`;
+    }
+  }
+
   return (
     <>
       {currentScreen === 'WELCOME' && (
@@ -253,7 +273,7 @@ function App() {
           <div className="wallet">
             <div className='your-wallet'>
               <img src="/coin.svg" />
-              <p>{userCoins}</p>
+              <p className='user-coin-amount'>{userCoins}</p>
             </div>
             <p>Bet: {currentPot}</p>
           </div>
@@ -266,7 +286,7 @@ function App() {
             <div className="dealers-hand">
               {dealersHand.map((crd, index) => {
                 return crd.isFaceDown
-                  ? <div className={`bicycle-card face-down-card`} key={index}>
+                  ? <div className={`bicycle-card dealer2 face-down-card`} key={index}>
                       <div className='card-box'>
                         <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -283,7 +303,7 @@ function App() {
                   : (
                     <div
                       className={
-                        `bicycle-card ${(crd.suit === 'HEARTS' || crd.suit === 'DIAMONDS') ? 'is-red' : ''}`
+                        `bicycle-card ${evaluateDealerAnimationClass(index)} ${(crd.suit === 'HEARTS' || crd.suit === 'DIAMONDS') ? 'is-red' : ''}`
                       }
                       key={index}
                     >
@@ -309,7 +329,7 @@ function App() {
               {playersHand.map((crd, index) => (
                 <div
                   className={
-                    `bicycle-card shiggy${index + 1} ${(crd.suit === 'HEARTS' || crd.suit === 'DIAMONDS') ? 'is-red' : ''}`
+                    `bicycle-card ${evaluatePlayerAnimationClass(index)} ${(crd.suit === 'HEARTS' || crd.suit === 'DIAMONDS') ? 'is-red' : ''}`
                   }
                   key={index}
                 >
