@@ -4,7 +4,7 @@ export function getRandomIndexFromArray(list: Array<Card>) {
   return Math.floor((Math.random()*list.length));
 }
 
-export function getGameResults(finalScorecard: ScoreCard, currentPot: number) {
+export function getTextResults(finalScorecard: ScoreCard, currentPot: number) {
   switch(true) {
     case finalScorecard.user > 21:
       return {
@@ -34,7 +34,7 @@ export function getGameResults(finalScorecard: ScoreCard, currentPot: number) {
         resultDetails: "Dealer's hand wins.",
         payout: 0,
       };
-    case finalScorecard.dealer === finalScorecard.user:
+    default:
       return {
         cssClass: 'push-header',
         headerText: 'PUSH!',
@@ -44,17 +44,35 @@ export function getGameResults(finalScorecard: ScoreCard, currentPot: number) {
   }
 }
 
+/*
+  How to Calculate a Hand in Blackjack:
+  1. Set aside Ace cards, since they require special logic.
+  2. Add up the score of all non-ace cards that are faceup.
+  3. For each Ace card in the hand, determine if its a 1 or an 11.
+
+  Aces - How to Determine Their Value:
+  1. Condition A: Runs first every time:
+      Set all Aces in hand to 11 and add it to the score.
+      If the result is less than or equal to 21, that's the score.
+  2. Condition B: Runs only if there are 2 or more Aces in the hand:
+      What happens if all but one of the Aces are set to 11?
+      If the result is less than or equal to 21, that's the score.
+  3. Condition C: Runs only if there are 3 Aces in hand:
+      What happens if you add 13? (An eleven and two ones)
+  4. Condition D: If none of the above conditions are met:
+      All Aces are set to a value of 1 and added to the score.
+*/
+
 export function calculateScoreFromHand(hand: Card[]) {
-  const aceCards: Card[] = hand.filter(card => card.value === 'A' && !card.isFaceDown);
   let score = 0;
 
-  // Remove ace cards from hand so we can use logic later:
+  const aceCards: Card[] = hand.filter(
+    card => card.value === "A" && !card.isFaceDown,
+  );
   if (aceCards.length) {
-    hand = hand.filter(card => card.value !== 'A');
+    hand = hand.filter(card => card.value !== "A");
   }
 
-  // Count non-ace cards first,
-  // and do NOT count score for any facedown cards:
   hand.forEach(card => {
     if (!card.isFaceDown) {
       if (typeof card.value !== 'string') {
@@ -65,21 +83,23 @@ export function calculateScoreFromHand(hand: Card[]) {
     }
   });
 
-  // If the hand has any Ace cards,
-  // logic needs to be performed:
+  // Logic for Ace cards:
   if (aceCards.length) {
     const numOfAces: number = aceCards.length;
 
-    if (score + (numOfAces * 11) <= 21) {
-      // If all Aces can be 11 without busting, just do that:
+    if ((numOfAces * 11) + score <= 21) {
       return score + (numOfAces * 11);
-    } else if (numOfAces > 1 && (score + ((numOfAces - 1) * 11) + 1 <= 21)) {
-      // If there are 2 or 3 Aces in the hand, and having them all at value = 11
-      // makes the player bust, check if the player can handle not busting when
-      // all but ONE Ace card has value = 11:
-      return score + ((numOfAces - 1) * 11) + 1;
+    } else if (numOfAces >= 2) {
+      if (((numOfAces - 1) * 11) + 1 <= 21) {
+        return score + ((numOfAces - 1) * 11) + 1;
+      }
+
+      if (numOfAces === 3) {
+        if (score + 13 < 21) {
+          return score + 13;
+        }
+      }
     } else {
-      // Otherwise, just make em all 1 lol:
       return score + (numOfAces * 1);
     }
   }

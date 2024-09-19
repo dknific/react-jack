@@ -219,6 +219,9 @@ button:focus-visible {
   padding: 0;
   margin: 0;
 }
+.hidden-score {
+  visibility: hidden;
+}
 .bust {
   color: red;
 }

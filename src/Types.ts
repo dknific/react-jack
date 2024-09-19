@@ -9,22 +9,13 @@ export type ScoreCard = {
   dealer: number
 };
 
-export type GameResult = {
-  status?: string,
-  class?: string,
-  details?: string
-}
-
 export type GameResults = {
+  finalDeck?: Card[],
+  finalScoreCard?: ScoreCard,
+  finalDealerHand?: Card[],
+  finalPlayerHand?: Card[],
   cssClass?: string,
   headerText?: string,
   resultDetails?: string,
   payout?: number,
-}
-
-export type FinalCards = {
-  finalDeck: Card[],
-  finalScoreCard: ScoreCard,
-  finalDealerHand: Card[],
-  finalPlayerHand: Card[]
 }

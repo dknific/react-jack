@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Card, FinalCards, GameResults, ScoreCard } from './Types';
+import { Card, GameResults, ScoreCard } from './Types';
 import { cardDeck } from './CardDeck';
 import {
   calculateScoreFromHand,
-  getGameResults,
+  getTextResults,
   getRandomIndexFromArray,
   renderSuitSymbolUTF
 } from './gameFunctions';
@@ -56,9 +56,16 @@ function App() {
       user: calculateScoreFromHand(playersStartingHand),
       dealer: calculateScoreFromHand(dealersStartingHand)
     });
+
+    setTimeout(() => {
+      const scoreDisplays: NodeListOf<HTMLParagraphElement> = document.querySelectorAll('.hidden-score');
+      scoreDisplays.item(1).classList.remove('hidden-score');
+      scoreDisplays.item(0).classList.remove('hidden-score');
+      setCurrentScreen('PLAYING_GAME');
+    }, 1400);
   }
 
-  // Flip card and return the FinalCards object for dealers turn:
+  // Calculate and return the game results object for dealers turn:
   function calculateEndResultOfDealersTurn() {
     let finalDealerHand: Card[] = dealersHand.map(card => {
       const newCard: Card = { ...card, isFaceDown: false };
@@ -78,23 +85,30 @@ function App() {
     }
 
     const finalScoreCard: ScoreCard = { user: calculateScoreFromHand(playersHand), dealer: calculateScoreFromHand(finalDealerHand) };
-    return { finalDeck, finalScoreCard, finalDealerHand, finalPlayerHand: playersHand };
+    const missingResultsLol: GameResults = getTextResults(finalScoreCard, currentPot);
+    const temp: GameResults = {
+      finalDeck: finalDeck,
+      finalDealerHand: finalDealerHand,
+      finalPlayerHand: playersHand,
+      finalScoreCard: finalScoreCard,
+      cssClass: missingResultsLol.cssClass,
+      headerText: missingResultsLol.headerText,
+      resultDetails: missingResultsLol.resultDetails,
+      payout: missingResultsLol.payout
+    };
+
+    return temp;
   }
 
-  function evaluateRound(finalCards: FinalCards) {
-    const gameResults: GameResults = getGameResults(finalCards.finalScoreCard, currentPot)!;
-    setGameResult(gameResults);
+  function beginDealersTurn() {
+    // Immediately evaluate the end result, but don't show player:
+    const finalGameResults: GameResults = calculateEndResultOfDealersTurn();
+    setGameResult(finalGameResults);
     setIsGameOver(true);
-    setUserCoins(userCoins + gameResults.payout!);
-    setDeck(finalCards.finalDeck);
-    setDealersHand(finalCards.finalDealerHand);
-    setScoreCard(finalCards.finalScoreCard);
-  }
-
-  function handleStandButton() {
-    setIsPlayersTurn(false);
-    const finalCards: FinalCards = calculateEndResultOfDealersTurn();
-    evaluateRound(finalCards);
+    setUserCoins(userCoins + finalGameResults.payout!);
+    setDeck(finalGameResults.finalDeck!);
+    setDealersHand(finalGameResults.finalDealerHand!);
+    setScoreCard(finalGameResults.finalScoreCard!);
   }
 
   function handleHitButton() {
@@ -111,10 +125,31 @@ function App() {
     setScoreCard({ ...scoreCard, user: newPlayerScore });
 
     if (newPlayerScore > 21) {
-      const finalCards: FinalCards = { finalDeck: updatedDeck, finalDealerHand: dealersHand, finalPlayerHand: newPlayerHand, finalScoreCard: { ...scoreCard, user: newPlayerScore }}
-      evaluateRound(finalCards);
+      setIsPlayersTurn(false);
+      const finalResults: GameResults = {
+        finalDeck: updatedDeck,
+        finalDealerHand: dealersHand,
+        finalPlayerHand: newPlayerHand,
+        finalScoreCard: { ...scoreCard, user: newPlayerScore }
+      };
+      const textResults: GameResults = getTextResults(finalResults.finalScoreCard!, currentPot);
+      finalResults.cssClass = textResults.cssClass,
+      finalResults.headerText = textResults.headerText,
+      finalResults.resultDetails = textResults.resultDetails,
+      finalResults.payout = textResults.payout
+
+      setTimeout(() => {
+        setGameResult(finalResults);
+        setIsGameOver(true);
+        setUserCoins(userCoins + finalResults.payout!);
+        setDeck(finalResults.finalDeck!);
+        setDealersHand(finalResults.finalDealerHand!);
+        setScoreCard(finalResults.finalScoreCard!);
+      }, 600);
+      
     } else if (newPlayerScore == 21) {
-      handleStandButton();
+      setIsPlayersTurn(false);
+      setTimeout(() => beginDealersTurn(), 1000);
     }
   }
 
@@ -134,7 +169,7 @@ function App() {
   function placeFinalBet() {
     setUserCoins(userCoins - proposedBet);
     setCurrentPot(proposedBet);
-    setCurrentScreen('PLAY_GAME');
+    setCurrentScreen('PLAY_GAME_BEGIN_DEALING');
 
     dealOpeningCards();
   }
@@ -161,6 +196,11 @@ function App() {
     } else if (dealersHand.length === 2) {
       return `dealer${cardIndex + 1}`;
     }
+  }
+
+  function handleStandButton() {
+    setIsPlayersTurn(false);
+    setTimeout(() => { beginDealersTurn() }, 600);
   }
 
   return (
@@ -249,7 +289,7 @@ function App() {
         </div>
       )}
 
-      {currentScreen === 'PLAY_GAME' && (
+      {((currentScreen === 'PLAY_GAME_BEGIN_DEALING') || (currentScreen === 'PLAYING_GAME')) && (
         <>
           {isGameOver && (
             <div className="game-over-screen">
@@ -281,7 +321,7 @@ function App() {
           <div className='dealer-ui'>
             <div className={`dealer-chip ${isPlayersTurn ? '' : 'is-dealers-turn'}`}>DEALER</div>
             {scoreCard.dealer > 0 && (
-              <p className={`player-score ${scoreCard.dealer > 21 ? 'bust' : ''}`}>{scoreCard.dealer}</p>
+              <p className={`player-score ${currentScreen !== 'PLAYING_GAME' ? 'hidden-score' : ''} ${scoreCard.dealer > 21 ? 'bust' : ''}`}>{scoreCard.dealer}</p>
             )}
             <div className="dealers-hand">
               {dealersHand.map((crd, index) => {
@@ -320,7 +360,7 @@ function App() {
           <div className={`player-chip ${isPlayersTurn ? 'is-players-turn' : ''}`}>YOU</div>
           {scoreCard.dealer > 0 && (
             <p
-              className={`player-score ${scoreCard.user > 21 ? 'bust' : ''}`}
+              className={`player-score ${currentScreen !== 'PLAYING_GAME' ? 'hidden-score' : ''} ${scoreCard.user > 21 ? 'bust' : ''}`}
             >
               {scoreCard.user}
             </p>
@@ -339,16 +379,18 @@ function App() {
                 </div>
               ))}
             </div>
-            <div className='button-holder'>
-              <button className='stand-button' onClick={() => handleStandButton()}>Stand</button>
-              <button
-                className='hit-button'
-                disabled={scoreCard.user >= 21}
-                onClick={() => handleHitButton()}
-              >
-                Hit
-              </button>
-            </div>
+            {isPlayersTurn && (
+              <div className='button-holder'>
+                <button className='stand-button' onClick={() => handleStandButton()}>Stand</button>
+                <button
+                  className='hit-button'
+                  disabled={scoreCard.user >= 21}
+                  onClick={() => handleHitButton()}
+                >
+                  Hit
+                </button>
+              </div>
+            )}
           </div>
         </>
       )}
