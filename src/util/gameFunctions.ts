@@ -1,4 +1,4 @@
-import { Card, ScoreCard } from './Types';
+import { Card, ScoreCard } from '../util/Types';
 
 export function getRandomIndexFromArray(list: Array<Card>) {
   return Math.floor((Math.random()*list.length));
