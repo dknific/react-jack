@@ -41,10 +41,9 @@ export default function GamePlayScreen(props: GamePlayProps) {
 
       <div className="wallet">
         <div className='your-wallet'>
-          <img src="/coin.svg" />
-          <p className='user-coin-amount'>{userCoins}</p>
+          <p className='user-coin-amount'><span className="wallet-bold">You:</span> {userCoins}<img src="/coin.svg" /></p>
         </div>
-        <p>Bet: {currentPot}</p>
+        <p className='pot-coin-amount'><span className="wallet-bold">Pot:</span> {currentPot}<img src="/coin.svg" /></p>
       </div>
 
       <div className='dealer-ui'>

@@ -171,7 +171,9 @@ export function calculateScoreFromHand(hand: Card[]) {
 }
 
 export function evaluateCssClassForPlayerCard(cardIndex: number, numOfCardsInHand: number) {
-  if (numOfCardsInHand === 4) {
+  if (numOfCardsInHand === 5) {
+    return `player${cardIndex + 1} five-card-position`
+  } else if (numOfCardsInHand === 4) {
     return `player${cardIndex + 1} four-card-position`
   } else if (numOfCardsInHand === 3) {
     return `player${cardIndex + 1} three-card-position`
@@ -181,7 +183,9 @@ export function evaluateCssClassForPlayerCard(cardIndex: number, numOfCardsInHan
 }
 
 export function evaluateCssClassForDealerCard(cardIndex: number, numOfCardsInHand: number) {
-  if (numOfCardsInHand === 4) {
+  if (numOfCardsInHand === 5) {
+    return `dealer${cardIndex + 1} five-card-position`
+  } else if (numOfCardsInHand === 4) {
     return `dealer${cardIndex + 1} four-card-position`
   } else if (numOfCardsInHand === 3) {
     return `dealer${cardIndex + 1} three-card-position`

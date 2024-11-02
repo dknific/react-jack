@@ -140,17 +140,24 @@ button:focus-visible {
 }
 
 .wallet img {
-  margin: 0 6px;
+  margin: 0 3px;
+  width: 16px;
 }
 
 .wallet p {
   margin: 0;
 }
 
-.your-wallet {
+.your-wallet,
+.user-coin-amount,
+.pot-coin-amount {
   display: flex;
 }
 
+.wallet-bold {
+  font-weight: bold;
+  margin-right: 4px;
+}
 
 .dealer-ui {
   display: flex;
@@ -609,8 +616,11 @@ button:focus-visible {
   }
 }
 
-
-/* test stuff ahhhh */
+/* ANIMATIONS FOR DEALING CARDS: */
+/* A TS method called evaluateCssClassFor__Hand() will */
+/* add a new class to each playing card based on how many cards */
+/* are currently in the hand. This way, we can add CSS animations */
+/* that both "deal" and adjust the position of CSS cards. */
 
 .players-hand, .dealers-hand {
   height: 107px;
@@ -622,7 +632,7 @@ button:focus-visible {
 }
 
 .bicycle-card.player1 {
-  animation: playerCard1DealToBottom 0.3s ease-out;
+  animation: dealCard1ToBottomHand 0.3s ease-out;
   animation-fill-mode: forwards;
 }
 
@@ -633,6 +643,11 @@ button:focus-visible {
 
 .bicycle-card.player1.four-card-position {
   animation: playerCard1MoveToFourCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bicycle-card.player1.five-card-position {
+  animation: playerCard1MoveToFiveCardPosition 0.3s ease-out;
   animation-fill-mode: forwards;
 }
 
@@ -652,6 +667,11 @@ button:focus-visible {
   animation-fill-mode: forwards;
 }
 
+.bicycle-card.player2.five-card-position {
+  animation: playerCard2MoveToFiveCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
 .bicycle-card.player3 {
   animation: dealCard3ToBottomHand 0.3s ease-out;
   animation-fill-mode: forwards;
@@ -662,8 +682,23 @@ button:focus-visible {
   animation-fill-mode: forwards;
 }
 
+.bicycle-card.player3.five-card-position {
+  animation: playerCard3MoveToFiveCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
 .bicycle-card.player4.four-card-position {
   animation: dealCard4ToBottomHand 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bicycle-card.player4.five-card-position {
+  animation: playerCard4MoveToFiveCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bicycle-card.player5.five-card-position {
+  animation: dealCard5ToBottomHand 0.3s ease-out;
   animation-fill-mode: forwards;
 }
 
@@ -678,15 +713,27 @@ button:focus-visible {
   animation-fill-mode: forwards;
 }
 
-.bicycle-card.dealer2 {
-  animation: dealCard2ToTopHand 0.3s ease-out;
-  animation-delay: 0.9s;
-  animation-fill-mode: forwards;
-}
-
 .bicycle-card.dealer1.three-card-position {
   bottom: 32px;
   animation: dealerCard1MoveToThreeCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bicycle-card.dealer1.four-card-position {
+  bottom: 32px;
+  animation: dealerCard1MoveToFourCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bicycle-card.dealer1.five-card-position {
+  bottom: 32px;
+  animation: dealerCard1MoveToFiveCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bicycle-card.dealer2 {
+  animation: dealCard2ToTopHand 0.3s ease-out;
+  animation-delay: 0.9s;
   animation-fill-mode: forwards;
 }
 
@@ -696,13 +743,55 @@ button:focus-visible {
   animation-fill-mode: forwards;
 }
 
+.bicycle-card.dealer2.four-card-position {
+  bottom: 32px;
+  animation: dealerCard2MoveToFourCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bicycle-card.dealer2.five-card-position {
+  bottom: 32px;
+  animation: dealerCard2MoveToFiveCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
 .bicycle-card.dealer3.three-card-position {
   bottom: 32px;
   animation: dealCard3ToTopHand 0.3s ease-out;
   animation-fill-mode: forwards;
 }
 
-@keyframes playerCard1DealToBottom {
+.bicycle-card.dealer3.four-card-position {
+  bottom: 32px;
+  animation: dealerCard3MoveToFourCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bicycle-card.dealer3.five-card-position {
+  bottom: 32px;
+  animation: dealerCard3MoveToFiveCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bicycle-card.dealer4.four-card-position {
+  bottom: 32px;
+  animation: dealCard4ToTopHand 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bicycle-card.dealer4.five-card-position {
+  bottom: 32px;
+  animation: dealerCard4MoveToFiveCardPosition 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bicycle-card.dealer5.five-card-position {
+  bottom: 32px;
+  animation: dealCard5ToTopHand 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes dealCard1ToBottomHand {
   from {
     bottom: 94vh;
     margin-right: 0;
@@ -710,6 +799,49 @@ button:focus-visible {
   to {
     bottom: 0;
     margin-right: 95px;
+  }
+}
+
+@keyframes dealCard2ToBottomHand {
+  from {
+    margin-right: 0;
+  }
+  to {
+    bottom: 0;
+    margin-left: 95px;
+  }
+}
+
+@keyframes dealCard3ToBottomHand {
+  from {
+    bottom: 94vh;
+    margin-left: 0;
+  }
+  to {
+    bottom: 0;
+    margin-left: 95px;
+  }
+}
+
+@keyframes dealCard4ToBottomHand {
+  from {
+    bottom: 94vh;
+    margin-left: 0;
+  }
+  to {
+    bottom: 0;
+    margin-left: 138px;
+  }
+}
+
+@keyframes dealCard5ToBottomHand {
+  from {
+    bottom: 94vh;
+    margin-left: 0;
+  }
+  to {
+    bottom: 0;
+    margin-left: 124px;
   }
 }
 
@@ -730,18 +862,19 @@ button:focus-visible {
     bottom: 0;
   }
   to {
-    margin-right: 120px;
+    margin-right: 110px;
     bottom: 0;
   }
 }
 
-@keyframes dealCard2ToBottomHand {
+@keyframes playerCard1MoveToFiveCardPosition {
   from {
-    margin-right: 0;
+    margin-right: 105px;
+    bottom: 0;
   }
   to {
+    margin-right: 112px;
     bottom: 0;
-    margin-left: 95px;
   }
 }
 
@@ -759,7 +892,7 @@ button:focus-visible {
 @keyframes playerCard2MoveToFourCardPosition {
   from {
     margin-left: 0;
-    
+    bottom: 0;
   }
   to {
     margin-left: -15px;
@@ -767,21 +900,21 @@ button:focus-visible {
   }
 }
 
-@keyframes dealCard3ToBottomHand {
+@keyframes playerCard2MoveToFiveCardPosition {
   from {
-    bottom: 94vh;
     margin-left: 0;
+    bottom: 0;
   }
   to {
+    margin-left: -45px;
     bottom: 0;
-    margin-left: 95px;
   }
 }
 
 @keyframes playerCard3MoveToFourCardPosition {
   from {
     margin-left: 95px;
-    
+    bottom: 0;
   }
   to {
     margin-left: 72px;
@@ -789,14 +922,25 @@ button:focus-visible {
   }
 }
 
-@keyframes dealCard4ToBottomHand {
+@keyframes playerCard3MoveToFiveCardPosition {
   from {
-    bottom: 94vh;
-    margin-left: 0;
+    margin-left: 95px;
+    bottom: 0;
   }
   to {
+    margin-left: 0;
     bottom: 0;
-    margin-left: 156px;
+  }
+}
+
+@keyframes playerCard4MoveToFiveCardPosition {
+  from {
+    margin-left: 95px;
+    bottom: 0;
+  }
+  to {
+    margin-left: 65px;
+    bottom: 0;
   }
 }
 
@@ -826,7 +970,27 @@ button:focus-visible {
   }
   to {
     bottom: 0;
-    margin-left: 95px;
+    margin-left: 85px;
+  }
+}
+
+@keyframes dealCard4ToTopHand {
+  from {
+    bottom: 65vh;
+  }
+  to {
+    bottom: 0;
+    margin-left: 135px;
+  }
+}
+
+@keyframes dealCard5ToTopHand {
+  from {
+    bottom: 65vh;
+  }
+  to {
+    bottom: 0;
+    margin-left: 125px;
   }
 }
 
@@ -836,7 +1000,7 @@ button:focus-visible {
     bottom: 0;
   }
   to {
-    margin-right: 105px;
+    margin-right: 71px;
     bottom: 0;
   }
 }
@@ -847,7 +1011,81 @@ button:focus-visible {
     bottom: 0;
   }
   to {
-    margin-left: 0px;
+    margin-left: 15px;
+    bottom: 0;
+  }
+}
+
+@keyframes dealerCard1MoveToFourCardPosition {
+  from {
+    margin-right: 105px;
+    bottom: 0;
+  } to {
+    margin-right: 105px;
+    bottom: 0;
+  }
+}
+
+@keyframes dealerCard1MoveToFiveCardPosition {
+  from {
+    margin-right: 105px;
+    bottom: 0;
+  } to {
+    margin-right: 75px;
+    bottom: 0;
+  }
+}
+
+@keyframes dealerCard2MoveToFourCardPosition {
+  from {
+    margin-left: 0;
+    margin-right: 0;
+    bottom: 0;
+  } to {
+    margin-left: 0;
+    margin-right: 21px;
+    bottom: 0;
+  }
+}
+
+@keyframes dealerCard2MoveToFiveCardPosition {
+  from {
+    margin-left: 0;
+    margin-right: 0;
+    bottom: 0;
+  } to {
+    margin-left: 0;
+    margin-right: 21px;
+    bottom: 0;
+  }
+}
+
+@keyframes dealerCard3MoveToFourCardPosition {
+  from {
+    margin-left: 95px;
+    bottom: 0;
+  } to {
+    margin-left: 75px;
+    bottom: 0;
+  }
+}
+
+@keyframes dealerCard3MoveToFiveCardPosition {
+  from {
+    margin-left: 95px;
+    bottom: 0;
+  } to {
+    margin-left: 25px;
+    bottom: 0;
+  }
+}
+
+@keyframes dealerCard4MoveToFiveCardPosition {
+  from {
+    margin-left: 95px;
+    bottom: 0;
+  } to {
+    margin-left: 79px;
     bottom: 0;
   }
 }

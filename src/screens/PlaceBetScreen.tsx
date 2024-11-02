@@ -16,7 +16,7 @@ export default function PlaceBetScreen(props: PlaceBetScreenProps) {
             <h3>Place Your Bet!</h3>
             <p className='proposed-bet'>{proposedBet}</p>
             <div className='wallet-explainer'>
-              <p>Your Coins:</p>
+              <p>Your Wallet:</p>
               <div>
                 <img src="/coin.svg" />
                 <p>{userCoins}</p>

@@ -174,7 +174,7 @@ function App() {
                 cardToPush = finalGameState.finalDealerHand![finalGameState.finalDealerHand!.length - numberOfCardsLeftToReveal];
                 updatedDealerHand.push(cardToPush);
                 setDealersHand(updatedDealerHand);
-                setScoreCard({ user: scoreCard.user, dealer: calculateScoreFromHand(updatedDealerHand) });
+                setScoreCard({ user: calculateScoreFromHand(playersHand), dealer: calculateScoreFromHand(updatedDealerHand) });
 
                 setTimeout(() => {
                   setIsGameOver(true);
