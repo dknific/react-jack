@@ -1,16 +1,14 @@
-import { Card, GameResults, ScoreCard } from '../util/Types';
-import { renderSuitSymbolUTF } from '../util/gameFunctions';
+import { Card, FinalGameState, ScoreCard } from '../util/Types';
+import { evaluateCssClassForDealerCard, evaluateCssClassForPlayerCard, renderSuitSymbolUTF, SCREENS } from '../util/gameMethods';
 import GameOverScreen from './GameOverScreen';
 
 interface GamePlayProps {
   currentPot: number,
   currentScreen: string,
   dealersHand: Card[],
-  evaluateDealerAnimationClass: (index: number) => void,
-  evaluatePlayerAnimationClass: (index: number) => void,
   isGameOver: boolean,
   isPlayersTurn: boolean,
-  gameResult: GameResults,
+  finalGameState: FinalGameState,
   handleHitButton: () => void,
   handlePlayAgainButton: () => void,
   handleStandButton: () => void,
@@ -24,9 +22,7 @@ export default function GamePlayScreen(props: GamePlayProps) {
     currentPot,
     currentScreen,
     dealersHand,
-    evaluateDealerAnimationClass,
-    evaluatePlayerAnimationClass,
-    gameResult,
+    finalGameState,
     handleStandButton,
     handlePlayAgainButton,
     handleHitButton,
@@ -40,7 +36,7 @@ export default function GamePlayScreen(props: GamePlayProps) {
   return (
     <>
       {isGameOver && (
-        <GameOverScreen gameResult={gameResult} handlePlayAgainButton={handlePlayAgainButton} />
+        <GameOverScreen finalGameState={finalGameState} handlePlayAgainButton={handlePlayAgainButton} />
       )}
 
       <div className="wallet">
@@ -54,7 +50,7 @@ export default function GamePlayScreen(props: GamePlayProps) {
       <div className='dealer-ui'>
         <div className={`dealer-chip ${isPlayersTurn ? '' : 'is-dealers-turn'}`}>DEALER</div>
         {scoreCard.dealer > 0 && (
-          <p className={`player-score ${currentScreen !== 'PLAYING_GAME' ? 'hidden-score' : ''} ${scoreCard.dealer > 21 ? 'bust' : ''}`}>{scoreCard.dealer}</p>
+          <p className={`player-score ${currentScreen !== SCREENS.gameplay ? 'hidden-score' : ''} ${scoreCard.dealer > 21 ? 'bust' : ''}`}>{scoreCard.dealer}</p>
         )}
         <div className="dealers-hand">
           {dealersHand.map((crd, index) => {
@@ -76,7 +72,7 @@ export default function GamePlayScreen(props: GamePlayProps) {
               : (
                 <div
                   className={
-                    `bicycle-card ${evaluateDealerAnimationClass(index)} ${(crd.suit === 'HEARTS' || crd.suit === 'DIAMONDS') ? 'is-red' : ''}`
+                    `bicycle-card ${evaluateCssClassForDealerCard(index, dealersHand.length)} ${(crd.suit === 'HEARTS' || crd.suit === 'DIAMONDS') ? 'is-red' : ''}`
                   }
                   key={index}
                 >
@@ -93,7 +89,7 @@ export default function GamePlayScreen(props: GamePlayProps) {
       <div className={`player-chip ${isPlayersTurn ? 'is-players-turn' : ''}`}>YOU</div>
       {scoreCard.dealer > 0 && (
         <p
-          className={`player-score ${currentScreen !== 'PLAYING_GAME' ? 'hidden-score' : ''} ${scoreCard.user > 21 ? 'bust' : ''}`}
+          className={`player-score ${currentScreen !== SCREENS.gameplay ? 'hidden-score' : ''} ${scoreCard.user > 21 ? 'bust' : ''}`}
         >
           {scoreCard.user}
         </p>
@@ -102,7 +98,7 @@ export default function GamePlayScreen(props: GamePlayProps) {
           {playersHand.map((crd, index) => (
             <div
               className={
-                `bicycle-card ${evaluatePlayerAnimationClass(index)} ${(crd.suit === 'HEARTS' || crd.suit === 'DIAMONDS') ? 'is-red' : ''}`
+                `bicycle-card ${evaluateCssClassForPlayerCard(index, playersHand.length)} ${(crd.suit === 'HEARTS' || crd.suit === 'DIAMONDS') ? 'is-red' : ''}`
               }
               key={index}
             >

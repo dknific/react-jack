@@ -526,17 +526,17 @@ button:focus-visible {
   margin: 22px 0;
 }
 
-.payout-text {
+.coinPayout-text {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.payout-amount {
+.coinPayout-amount {
   display: flex;
 }
 
-.payout-amount img {
+.coinPayout-amount img {
   margin: 0 4px 0 6px;
 }
 

@@ -1,23 +1,23 @@
-import { GameResults } from '../util/Types';
+import { FinalGameState } from '../util/Types';
 
 interface GameOverProps {
-  gameResult: GameResults,
+  finalGameState: FinalGameState,
   handlePlayAgainButton: () => void,
 }
 
 export default function GameOverScreen(props: GameOverProps) {
-  const { gameResult, handlePlayAgainButton } = props;
+  const { finalGameState, handlePlayAgainButton } = props;
   return (
     <div className="game-over-screen">
       <div className="game-over-modal">
-        <h3 className={gameResult.cssClass}>{gameResult.headerText}</h3>
-        <p>{gameResult.resultDetails}</p>
-        {(gameResult.payout! > 0) && (
-          <div className='payout-text'>
+        <h3 className={finalGameState.cssClass}>{finalGameState.gameOverMessage}</h3>
+        <p>{finalGameState.gameOverDetails}</p>
+        {(finalGameState.coinPayout! > 0) && (
+          <div className='coinPayout-text'>
             <p>You win</p>
-            <div className='payout-amount'>
+            <div className='coinPayout-amount'>
               <img src="/coin.svg" />
-              <p>{gameResult.payout}.</p>
+              <p>{finalGameState.coinPayout}.</p>
             </div>
           </div>
         )}
