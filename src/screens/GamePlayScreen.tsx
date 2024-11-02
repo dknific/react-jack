@@ -108,8 +108,7 @@ export default function GamePlayScreen(props: GamePlayProps) {
             </div>
           ))}
         </div>
-        {isPlayersTurn && (
-          <div className='button-holder'>
+          <div className={`button-holder ${isPlayersTurn ? '' : 'hide-button-holder'}`}>
             <button className='stand-button' onClick={() => handleStandButton()}>Stand</button>
             <button
               className='hit-button'
@@ -119,7 +118,6 @@ export default function GamePlayScreen(props: GamePlayProps) {
               Hit
             </button>
           </div>
-        )}
       </div>
     </>
   );

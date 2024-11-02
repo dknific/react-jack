@@ -220,6 +220,7 @@ button:focus-visible {
   width: 100%;
   left: 0;
   height: 38%;
+  max-height: 257px;
   justify-content: space-between;
 }
 
@@ -242,6 +243,7 @@ button:focus-visible {
 
 .players-hand,
 .dealers-hand {
+  position: relative;
   display: flex;
   justify-content: center;
 }
@@ -330,7 +332,8 @@ button:focus-visible {
   justify-content: space-evenly;
 }
 
-.button-holder.is-standing {
+.button-holder.is-standing,
+.button-holder.hide-button-holder {
   visibility: hidden;
 }
 
@@ -574,6 +577,7 @@ button:focus-visible {
   .player-ui {
     height: 236px;
     justify-content: baseline;
+    
   }
 
   .player-ui > .player-score {
@@ -623,13 +627,11 @@ button:focus-visible {
 }
 
 .bicycle-card.player1.three-card-position {
-  bottom: 72px;
   animation: playerCard1MoveToThreeCardPosition 0.3s ease-out;
   animation-fill-mode: forwards;
 }
 
 .bicycle-card.player1.four-card-position {
-  bottom: 72px;
   animation: playerCard1MoveToFourCardPosition 0.3s ease-out;
   animation-fill-mode: forwards;
 }
@@ -641,13 +643,11 @@ button:focus-visible {
 }
 
 .bicycle-card.player2.three-card-position {
-  bottom: 72px;
   animation: playerCard2MoveToThreeCardPosition 0.3s ease-out;
   animation-fill-mode: forwards;
 }
 
 .bicycle-card.player2.four-card-position {
-  bottom: 72px;
   animation: playerCard2MoveToFourCardPosition 0.3s ease-out;
   animation-fill-mode: forwards;
 }
@@ -658,13 +658,11 @@ button:focus-visible {
 }
 
 .bicycle-card.player3.four-card-position {
-  bottom: 72px;
   animation: playerCard3MoveToFourCardPosition 0.3s ease-out;
   animation-fill-mode: forwards;
 }
 
 .bicycle-card.player4.four-card-position {
-  bottom: 72px;
   animation: dealCard4ToBottomHand 0.3s ease-out;
   animation-fill-mode: forwards;
 }
@@ -710,7 +708,7 @@ button:focus-visible {
     margin-right: 0;
   }
   to {
-    bottom: 72px;
+    bottom: 0;
     margin-right: 95px;
   }
 }
@@ -718,9 +716,10 @@ button:focus-visible {
 @keyframes playerCard1MoveToThreeCardPosition {
   from {
     margin-right: 95px;
-    
+    bottom: 0;
   }
   to {
+    bottom: 0;
     margin-right: 105px;
   }
 }
@@ -728,20 +727,20 @@ button:focus-visible {
 @keyframes playerCard1MoveToFourCardPosition {
   from {
     margin-right: 105px;
-    
+    bottom: 0;
   }
   to {
     margin-right: 120px;
+    bottom: 0;
   }
 }
 
 @keyframes dealCard2ToBottomHand {
   from {
-    bottom: 94vh;
     margin-right: 0;
   }
   to {
-    bottom: 72px;
+    bottom: 0;
     margin-left: 95px;
   }
 }
@@ -749,10 +748,11 @@ button:focus-visible {
 @keyframes playerCard2MoveToThreeCardPosition {
   from {
     margin-left: 95px;
-    
+    bottom: 0;
   }
   to {
     margin-left: 0px;
+    bottom: 0;
   }
 }
 
@@ -763,6 +763,7 @@ button:focus-visible {
   }
   to {
     margin-left: -15px;
+    bottom: 0;
   }
 }
 
@@ -772,7 +773,7 @@ button:focus-visible {
     margin-left: 0;
   }
   to {
-    bottom: 72px;
+    bottom: 0;
     margin-left: 95px;
   }
 }
@@ -784,6 +785,7 @@ button:focus-visible {
   }
   to {
     margin-left: 72px;
+    bottom: 0;
   }
 }
 
@@ -793,7 +795,7 @@ button:focus-visible {
     margin-left: 0;
   }
   to {
-    bottom: 72px;
+    bottom: 0;
     margin-left: 156px;
   }
 }
@@ -803,7 +805,7 @@ button:focus-visible {
     bottom: 65vh;
   }
   to {
-    bottom: 32px;
+    bottom: 0;
     margin-right: 95px;
   }
 }
@@ -813,7 +815,7 @@ button:focus-visible {
     bottom: 65vh;
   }
   to {
-    bottom: 32px;
+    bottom: 0;
     margin-left: 95px;
   }
 }
@@ -823,7 +825,7 @@ button:focus-visible {
     bottom: 65vh;
   }
   to {
-    bottom: 32px;
+    bottom: 0;
     margin-left: 95px;
   }
 }
@@ -831,19 +833,21 @@ button:focus-visible {
 @keyframes dealerCard1MoveToThreeCardPosition {
   from {
     margin-right: 95px;
-    
+    bottom: 0;
   }
   to {
     margin-right: 105px;
+    bottom: 0;
   }
 }
 
 @keyframes dealerCard2MoveToThreeCardPosition {
   from {
     margin-left: 95px;
-    
+    bottom: 0;
   }
   to {
     margin-left: 0px;
+    bottom: 0;
   }
 }
