@@ -1,7 +1,8 @@
 import { Card, FinalGameState, ScoreCard } from './Types';
 
-export // Calculate and return the game results object for dealers turn:
-function calculateFinalGameState(currentPot: number, deck: Card[], dealersHand: Card[], playersHand: Card[]) {
+ // Calculate and return the game results object for dealers turn:
+export function calculateFinalGameState(currentPot: number, deck: Card[], dealersHand: Card[], playersHand: Card[]) {
+  // Flip dealers first card and calculate, then proceed:
   let finalDealerHand: Card[] = dealersHand.map(card => {
     const newCard: Card = { ...card, isFaceDown: false };
     return newCard;
@@ -17,6 +18,10 @@ function calculateFinalGameState(currentPot: number, deck: Card[], dealersHand: 
     finalDeck = finalDeck.filter(card => card !== pulledCard);
     finalDealerHand.push(pulledCard);
     dealerScore = calculateScoreFromHand(finalDealerHand);
+
+    if (finalDealerHand.length === 5 && dealerScore <= 21) {
+      break;
+    }
   }
 
   const finalScoreCard: ScoreCard = { user: calculateScoreFromHand(playersHand), dealer: calculateScoreFromHand(finalDealerHand) };
@@ -28,6 +33,12 @@ function calculateFinalGameState(currentPot: number, deck: Card[], dealersHand: 
   };
 
   switch(true) {
+    case finalDealerHand.length == 5 && finalScoreCard.dealer <= 21:
+      finalGameState.cssClass = 'lose-header';
+      finalGameState.gameOverMessage = 'LOSE!',
+      finalGameState.gameOverDetails = 'Five Card Charlie!. Dealer wins.';
+      finalGameState.coinPayout = 0;
+      break;
     case finalScoreCard.user > 21:
       finalGameState.cssClass = 'lose-header';
       finalGameState.gameOverMessage = 'LOSE!';
@@ -67,7 +78,7 @@ export function getRandomIndexFromArray(list: Array<Card>) {
   return Math.floor((Math.random()*list.length));
 }
 
-export function getTextResults(finalScorecard: ScoreCard, currentPot: number) {
+export function getEarlyGameEndResults(finalScorecard: ScoreCard, currentPot: number) {
   switch(true) {
     case finalScorecard.user > 21:
       return {

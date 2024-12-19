@@ -556,6 +556,10 @@ button:focus-visible {
   border: 1px solid #00000036;
 }
 
+.reset-btn {
+  margin-bottom: 16px;
+}
+
 @media (min-width: 720px) {
   .dealer-ui {
     height: auto;

@@ -61,7 +61,7 @@ export default function PlaceBetScreen(props: PlaceBetScreenProps) {
           <>
             <h3>Game Over!</h3>
             <p>You ran out of money</p>
-            <button onClick={() => window.location.reload()}>Reset Game</button>
+            <button onClick={() => window.location.reload()} className="reset-btn">Reset Game</button>
           </>
         )}
       </div>

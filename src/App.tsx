@@ -8,7 +8,7 @@ import {
   BLANK_FGS_OBJECT,
   calculateFinalGameState,
   calculateScoreFromHand,
-  getTextResults,
+  getEarlyGameEndResults,
   getRandomIndexFromArray,
   SCREENS
 } from './util/gameMethods';
@@ -81,7 +81,28 @@ function App() {
     setDeck(updatedDeck);
     setScoreCard({ ...scoreCard, user: newPlayerScore });
 
-    if (newPlayerScore > 21) {
+    if (newPlayerHand.length == 5 && newPlayerScore <= 21) {
+      setIsPlayersTurn(false);
+      const earlyResults: FinalGameState = {
+        cssClass: 'win-header',
+        gameOverMessage: 'WIN!',
+        gameOverDetails: 'Five Card Charlie!. Player wins.',
+        coinPayout: currentPot * 2,
+        finalDeck: updatedDeck,
+        finalDealerHand: dealersHand,
+        finalPlayerHand: newPlayerHand,
+        finalScoreCard: { ...scoreCard, user: newPlayerScore }
+      };
+
+      setTimeout(() => {
+        setFinalGameState(earlyResults);
+        setIsGameOver(true);
+        setUserCoins(userCoins + earlyResults.coinPayout!);
+        setDeck(earlyResults.finalDeck!);
+        setDealersHand(earlyResults.finalDealerHand!);
+        setScoreCard(earlyResults.finalScoreCard!);
+      }, 600);
+    } else if (newPlayerScore > 21) {
       setIsPlayersTurn(false);
       const finalResults: FinalGameState = {
         finalDeck: updatedDeck,
@@ -89,11 +110,11 @@ function App() {
         finalPlayerHand: newPlayerHand,
         finalScoreCard: { ...scoreCard, user: newPlayerScore }
       };
-      const textResults: FinalGameState = getTextResults(finalResults.finalScoreCard!, currentPot);
-      finalResults.cssClass = textResults.cssClass,
-      finalResults.gameOverMessage = textResults.gameOverMessage,
-      finalResults.gameOverDetails = textResults.gameOverDetails,
-      finalResults.coinPayout = textResults.coinPayout
+      const earlyResults: FinalGameState = getEarlyGameEndResults(finalResults.finalScoreCard!, currentPot);
+      finalResults.cssClass = earlyResults.cssClass,
+      finalResults.gameOverMessage = earlyResults.gameOverMessage,
+      finalResults.gameOverDetails = earlyResults.gameOverDetails,
+      finalResults.coinPayout = earlyResults.coinPayout
 
       setTimeout(() => {
         setFinalGameState(finalResults);
@@ -103,10 +124,6 @@ function App() {
         setDealersHand(finalResults.finalDealerHand!);
         setScoreCard(finalResults.finalScoreCard!);
       }, 600);
-      
-    } else if (newPlayerScore == 21) {
-      setIsPlayersTurn(false);
-      setTimeout(() => handleDealersTurn(), 1000);
     }
   }
 
@@ -127,8 +144,12 @@ function App() {
   }
 
   function handleDealersTurn() {
-    const finalGameState: FinalGameState = calculateFinalGameState(currentPot, deck, dealersHand, playersHand);
-    console.log('finalGameState', finalGameState);
+    const finalGameState: FinalGameState = calculateFinalGameState(
+      currentPot,
+      deck,
+      dealersHand,
+      playersHand
+    );
 
     setTimeout(() => {
       const revealedDealersHand: Card[] = [...dealersHand];
